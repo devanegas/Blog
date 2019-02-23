@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Blog.Data;
 using Blog.Models;
+using Microsoft.AspNetCore.Authorization;
+using Blog.Services;
 
 namespace Blog.Controllers
 {
@@ -54,6 +56,7 @@ namespace Blog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = MyIdentityDataService.BlogPolicy_Add)]
         public async Task<IActionResult> Create([Bind("Id,Title,Body,TimePosted")] BlogPost blogPost)
         {
             if (ModelState.IsValid)
@@ -66,6 +69,7 @@ namespace Blog.Controllers
         }
 
         // GET: BlogPosts/Edit/5
+        [Authorize(Policy = MyIdentityDataService.BlogPolicy_Edit)]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,6 +90,7 @@ namespace Blog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = MyIdentityDataService.BlogPolicy_Edit)]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Body,TimePosted")] BlogPost blogPost)
         {
             if (id != blogPost.Id)
@@ -117,6 +122,7 @@ namespace Blog.Controllers
         }
 
         // GET: BlogPosts/Delete/5
+        [Authorize(Policy = MyIdentityDataService.BlogPolicy_Delete)]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

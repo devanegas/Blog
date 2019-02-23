@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Blog.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Blog.Services;
 
 namespace Blog
 {
@@ -38,9 +39,17 @@ namespace Blog
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(MyIdentityDataService.BlogPolicy_Add, policy => policy.RequireRole(MyIdentityDataService.AdminRoleName, MyIdentityDataService.EditorRoleName, MyIdentityDataService.ContributorRoleName));
+                options.AddPolicy(MyIdentityDataService.BlogPolicy_Edit, policy => policy.RequireRole(MyIdentityDataService.AdminRoleName, MyIdentityDataService.EditorRoleName));
+                options.AddPolicy(MyIdentityDataService.BlogPolicy_Delete, policy => policy.RequireRole(MyIdentityDataService.AdminRoleName));
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
