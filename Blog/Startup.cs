@@ -55,7 +55,10 @@ namespace Blog
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, 
+                              IHostingEnvironment env,
+                              UserManager<IdentityUser> userManager,
+                              RoleManager<IdentityRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -74,6 +77,7 @@ namespace Blog
             app.UseCookiePolicy();
 
             app.UseAuthentication();
+            MyIdentityDataService.SeedData(userManager, roleManager);
 
             app.UseMvc(routes =>
             {
