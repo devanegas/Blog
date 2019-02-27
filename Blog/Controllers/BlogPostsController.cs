@@ -29,7 +29,8 @@ namespace Blog.Controllers
         }
 
         // GET: BlogPosts/Details/5
-        public async Task<IActionResult> Details(int? id)
+        [HttpGet, Route("Details/{id?}/{slug}")]
+        public async Task<IActionResult> Details(int? id, string slug)
         {
             if (id == null)
             {
@@ -42,6 +43,7 @@ namespace Blog.Controllers
             {
                 return NotFound();
             }
+
 
             return View(blogPost);
         }
@@ -62,6 +64,7 @@ namespace Blog.Controllers
         {
             if (ModelState.IsValid)
             {
+                blogPost.Slug = Friendly(blogPost.Title);
                 _context.Add(blogPost);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -94,6 +97,7 @@ namespace Blog.Controllers
         [Authorize(Policy = MyIdentityDataService.BlogPolicy_Edit)]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Body,TimePosted")] BlogPost blogPost)
         {
+
             if (id != blogPost.Id)
             {
                 return NotFound();
@@ -103,8 +107,10 @@ namespace Blog.Controllers
             {
                 try
                 {
+                    blogPost.Slug = Friendly(blogPost.Title);
                     _context.Update(blogPost);
                     await _context.SaveChangesAsync();
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -119,6 +125,7 @@ namespace Blog.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             return View(blogPost);
         }
 
@@ -157,9 +164,9 @@ namespace Blog.Controllers
             return _context.BlogPosts.Any(e => e.Id == id);
         }
 
-        //[HttpGet, A"friendly/{slug}"]
 
-        public static string URLFriendly(string title)
+
+        public static string Friendly(string title)
         {
             if (title == null) return "";
 
@@ -289,10 +296,5 @@ namespace Blog.Controllers
         }
 
     }
-
-
-
-    
-
 
 }
