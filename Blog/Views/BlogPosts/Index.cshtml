@@ -1,4 +1,11 @@
 ﻿@model IEnumerable<Blog.Models.BlogPost>
+@using Microsoft.AspNetCore.Authorization
+@using Blog.Services
+@inject IAuthorizationService Authorization
+@{
+    var canEdit = (await Authorization.AuthorizeAsync(User, MyIdentityDataService.BlogPolicy_Edit)).Succeeded;
+    var canDelete = (await Authorization.AuthorizeAsync(User, MyIdentityDataService.BlogPolicy_Delete)).Succeeded;
+}
 
 @{
     ViewData["Title"] = "Index";
@@ -25,23 +32,31 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Body)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TimePosted)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Body)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TimePosted)
+                </td>
+                <td>
+                    @if (canEdit)
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit | </a>
+                    }
+                    @if (canDelete)
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.Id"> Delete |</a>
+
+                    }
+                    <a asp-action="Details" asp-route-id="@item.Id"> Details</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
