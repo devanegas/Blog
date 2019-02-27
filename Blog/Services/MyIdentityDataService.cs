@@ -55,8 +55,6 @@ namespace Blog.Services
 
             }
         }
-
-        //public async Task<BlogPost[]> GetIncompleteItemsAsync
     
     }
 }
