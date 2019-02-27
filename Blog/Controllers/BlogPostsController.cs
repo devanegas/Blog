@@ -156,4 +156,8 @@ namespace Blog.Controllers
             return _context.BlogPosts.Any(e => e.Id == id);
         }
     }
+
+    //[HttpGet, ("friendlt/{slug}"]
+
+
 }

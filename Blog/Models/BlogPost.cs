@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 
 namespace Blog.Models
 {
+
+    //URL FRIENDLY LOOL AT SEO FRIENDLY URLS
     public class BlogPost
     {
         public int Id { get; set; }

@@ -19,12 +19,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="Body" class="control-label"></label>
-                <input asp-for="Body" class="form-control" />
+                <textarea asp-for="Body" class="form-control" rows="10" cols="40" placeholder="Write your entry here..."></textarea>
                 <span asp-validation-for="Body" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="TimePosted" class="control-label"></label>
-                <input asp-for="TimePosted" class="form-control" />
+                <input asp-for="TimePosted" class="form-control"/>
                 <span asp-validation-for="TimePosted" class="text-danger"></span>
             </div>
             <div class="form-group">
