@@ -5,6 +5,7 @@
 @{
     var canEdit = (await Authorization.AuthorizeAsync(User, MyIdentityDataService.BlogPolicy_Edit)).Succeeded;
     var canDelete = (await Authorization.AuthorizeAsync(User, MyIdentityDataService.BlogPolicy_Delete)).Succeeded;
+    var canAdd = (await Authorization.AuthorizeAsync(User, MyIdentityDataService.BlogPolicy_Add)).Succeeded;
 }
 
 @{
@@ -13,9 +14,11 @@
 
 <h1>Blog Posts</h1>
 
-<p>
-    <a asp-action="Create" id="createButton">Create New Post</a>
-</p>
+@if (canAdd) { 
+    <p>
+        <a asp-action="Create" id="createButton">Create New Post</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
